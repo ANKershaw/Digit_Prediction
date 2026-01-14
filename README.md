@@ -63,4 +63,30 @@ In the Machine Learning Zoomcamp, this replaces the Dataset class we built that 
 
 
 
+### Project Workflow
 
+
+
+
+### Requirements
+
+In order to run this project you'll need to clone the repo and install the following (zoomcamp participants should already have these installed.)
+kind: [https://kind.sigs.k8s.io/docs/user/quick-start/](https://kind.sigs.k8s.io/docs/user/quick-start/)
+docker: [https://docs.docker.com/desktop/](https://docs.docker.com/desktop/)
+uv: [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/)
+python 3.13: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+
+### Dependency Management
+Install packages: `uv sync --locked`
+
+### Deploy
+
+
+### Example post request
+```shell
+curl -X 'POST' \
+  'http://0.0.0.0:9696/predict' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@mnist_0_label_5.png;type=image/png'
+```
