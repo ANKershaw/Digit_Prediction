@@ -478,3 +478,6 @@ data_scratch/
 test.py
 test2.py
 testserve.py
+
+# this mac thing
+.DS_Store
