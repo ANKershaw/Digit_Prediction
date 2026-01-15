@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 import pandas as pd
 import torch
@@ -8,7 +7,6 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 
-#%%
 
 # class for the model
 class DigitClassifierScratch(nn.Module):
@@ -65,17 +63,21 @@ class DigitClassifierScratch(nn.Module):
 
 def main():
 	# establishing the seed values
-	
 	SEED = 42
 	np.random.seed(SEED)
 	torch.manual_seed(SEED)
 	
-	# PyTorch global seed (CPU + default device behavior)
-	torch.manual_seed(SEED)
-	
-	# MPS
-	if torch.backends.mps.is_available():
+	# offload tensor computations and neural network inference to the GPU (Apple’s Metal Performance Shaders (MPS))
+	if torch.backends.mps.is_built() and torch.backends.mps.is_available():
+		device = torch.device("mps")
 		torch.mps.manual_seed(SEED)
+	
+	elif torch.cuda.is_available():
+		device = torch.device("cuda")
+	
+	else:
+		device = torch.device("cpu")
+	
 	
 	# This transform is for the "from scratch" model and uses the standard MNIST normalize values
 	transform_scratch = transforms.Compose([
@@ -104,9 +106,6 @@ def main():
 	train_loader_scratch = DataLoader(trainset_scratch, batch_size=32, shuffle=True)
 	val_loader_scratch = DataLoader(testset_scratch, batch_size=32, shuffle=False)
 	
-	# offload tensor computations and neural network inference to the GPU (Apple’s Metal Performance Shaders (MPS))
-	device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-	
 	# set the criterion model to measure the error
 	criterion = nn.CrossEntropyLoss()
 	
@@ -117,7 +116,6 @@ def main():
 		optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 		return model, optimizer
 	
-	scratch_tuning_stats = pd.DataFrame()
 	highest_accuracy = 0
 	
 	model, optimizer = make_model_scratch(learning_rate=.001, dropout_rate=0.3, inner_size=240)

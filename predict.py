@@ -9,58 +9,6 @@ from PIL import Image
 app = FastAPI(title="digit_predict")
 
 
-class DigitClassifierScratch(nn.Module):
-	def __init__(self, num_classes=10, dropout_rate=0.3, inner_size=240):
-		super(DigitClassifierScratch, self).__init__()
-		
-		# for extracting features
-		self.layer1 = nn.Sequential(
-			nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1),
-			nn.ReLU(),
-			nn.MaxPool2d(kernel_size=2, stride=2),
-		)
-		
-		self.layer2 = nn.Sequential(
-			nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1),
-			nn.ReLU(),
-			nn.MaxPool2d(kernel_size=2, stride=2),
-		)
-		
-		self.layer3 = nn.Sequential(
-			nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1),
-			nn.ReLU(),
-			nn.MaxPool2d(kernel_size=2, stride=2),
-			nn.AdaptiveAvgPool2d((1, 1))
-		)
-		
-		# dense layers
-		self.flatten = nn.Flatten(1)
-		
-		self.inner_layer = nn.Linear(
-			in_features=64,
-			out_features=inner_size
-		)
-		self.ReLU = nn.ReLU()
-		self.dropout = nn.Dropout(dropout_rate)
-		self.output_layer = nn.Linear(
-			in_features=inner_size,
-			out_features=num_classes
-		)
-	
-	def forward(self, x):
-		x = self.layer1(x)
-		x = self.layer2(x)
-		x = self.layer3(x)
-		
-		x = self.flatten(x)
-		x = self.inner_layer(x)
-		x = self.ReLU(x)
-		x = self.dropout(x)
-		x = self.output_layer(x)
-		
-		return x
-
-
 def image_transform(img):
 	image_transforms = transforms.Compose([
 		transforms.ToTensor(),
@@ -112,6 +60,7 @@ async def predict(file: UploadFile = File(..., example="mnist_0_label_5.png")) -
 	return {
 		"prediction": f'{prediction}'
 	}
+
 
 @app.get("/health")
 def health():
