@@ -96,7 +96,7 @@ def predict_single(img):
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(..., example="mnist_0_label_5.png")) -> dict[str, str]:
 	prediction = ''
 	try:
 		img = file.file.read()
@@ -121,4 +121,4 @@ def health():
 
 
 if __name__ == "__main__":
-	uvicorn.run(app, host="0.0.0.0", port=9696)
+	uvicorn.run(app, host="0.0.0.0", port=8080)
