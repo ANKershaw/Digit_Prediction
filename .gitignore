@@ -473,3 +473,8 @@ fabric.properties
 # exclude MNIST data
 data_mobilenet/
 data_scratch/
+
+# local testing files
+test.py
+test2.py
+testserve.py

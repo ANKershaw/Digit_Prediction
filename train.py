@@ -120,8 +120,9 @@ def main():
 	scratch_tuning_stats = pd.DataFrame()
 	highest_accuracy = 0
 	
+	model, optimizer = make_model_scratch(learning_rate=.001, dropout_rate=0.3, inner_size=240)
+	
 	for epoch in range(10):
-		model, optimizer = make_model_scratch(learning_rate=.001, dropout_rate=0.3, inner_size=240)
 		model.train()  # Set the model to training mode
 		running_loss = 0.0
 		correct = 0
@@ -192,12 +193,18 @@ def main():
 		print(f'   → Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}')
 		print(f'   → Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.4f}\n')
 		if highest_accuracy < val_acc:
-			torch.save({
-				'model_state_dict':     model.state_dict(),
-				'optimizerB_state_dict': optimizer.state_dict(),
-			}, './model.pth')
+	
+			dummy_input = (torch.randn(1, 1, 28, 28, device="cpu"),)
+			model_cpu = model.to("cpu")
+			model_cpu.eval()
+			with torch.no_grad():
+				torch.onnx.export(model_cpu,
+				                  dummy_input,
+				                  'digit_classifier_scratch.onnx'
+				                  )
 			print(f'  Saving model.     \n')
 			highest_accuracy = val_acc
+			model.to(device)
 		
 if __name__ == "__main__":
 	main()
