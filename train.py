@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
+from onnx.external_data_helper import uses_external_data
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 
@@ -197,7 +198,8 @@ def main():
 			with torch.no_grad():
 				torch.onnx.export(model_cpu,
 				                  dummy_input,
-				                  'digit_classifier_scratch.onnx'
+				                  "digit_classifier_scratch.onnx",
+				                  external_data=False
 				                  )
 			print(f'  Saving model.     \n')
 			highest_accuracy = val_acc
