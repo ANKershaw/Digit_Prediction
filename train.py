@@ -3,12 +3,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
-from onnx.external_data_helper import uses_external_data
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 
-
-# class for the model
 class DigitClassifierScratch(nn.Module):
 	def __init__(self, num_classes=10, dropout_rate=0.0, inner_size=120):
 		super(DigitClassifierScratch, self).__init__()
