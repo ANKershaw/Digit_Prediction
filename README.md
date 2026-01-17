@@ -106,13 +106,17 @@ Install packages: `uv sync --locked`
 ## 2: Build the Docker Container
 Build the container locally: `docker build -t digit-classifier:v1 .`
 
-### To test the container (not required): 
+### To test predict.py (not required):
+1. `uv run uvicorn predict:app --host 0.0.0.0 --port 8080 --reload`
+2. Navigate to the docs page and click the 'try it out' button: [http://0.0.0.0:8080/docs](http://0.0.0.0:8080/docs)
+
+### To test the digit-classifier docker container (not required): 
 1. `docker run -it --rm -p 8080:8080 digit-classifier:v1`
 2. Navigate to the docs page and click the 'try it out' button: [http://0.0.0.0:8080/docs](http://0.0.0.0:8080/docs)
 3. Choose one of the files in the test_images directory, eg: `mnist_0_label_5.png`
 4. The correct answer is in the filename; it is the number after 'label'
 
-### Example post request to docker container (port 8080):
+### Example post request for testing docker container or predict.py (port 8080):
 ```shell
 curl -X 'POST' \
   'http://0.0.0.0:8080/predict' \

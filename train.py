@@ -202,6 +202,8 @@ def main():
 			print(f'  Saving model.     \n')
 			highest_accuracy = val_acc
 			model.to(device)
+			
+	print('All epochs complete.')
 		
 if __name__ == "__main__":
 	main()
