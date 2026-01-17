@@ -12,13 +12,12 @@
 ![image_info](./test_images/mnist_9_label_4.png)
 
 ## ✍️ Problem Description
-Writing by hand persists, even in the digital age. As more and more processing tasks are ported from humans to machines, the 
-ability for a computer system to easily and correctly identify human writing becomes paramount. There are tasks of immediate 
-importance, such as when postal services around the globe need to quickly and correctly route the millions of postal items received in a day, 
-or when banks must process millions of checks and route the exactly correct amount of money. Failures in these two fields alone are 
-inconvenient on a good day and potentially harmful on a bad one. 
+Handwriting persists, even in the digital age. As we continue to transfer sorting and processing tasks from humans to machines, the 
+ability for a scanning system to rapidly and accurately identify handwritten digits becomes paramount. This is especially
+true for tasks such as sorting mail and processing checks; failures in either of these fields alone could result in anything from 
+minor inconveniences to major harm.
 
-This problem is largely solved, but the data provides a great way to learn.
+This problem is largely solved, but thanks to the MNIST dataset we can learn how to implement a digit recognition system of our own. 
 
 ## 💡 Context
 This is the capstone project for DataTalks.Club's [Machine Learning Zoomcamp](https://github.com/DataTalksClub/machine-learning-zoomcamp).
@@ -34,11 +33,11 @@ images in the training dataset and 10,000 images in the validation dataset.
 
 Actual images from the dataset are shown at the top of this README; they look like this:  ![image info](./test_images/mnist_0_label_5.png)
 
-All of the images are 28x28 and greyscale (contain one color channel).
+The images are 28x28 and greyscale (contain one color channel).
 
 <details>
 <summary>🌐 How to download the data</summary>
-Note: downloading the data is handled in notebook.ipynb, this is here as a reference.
+Note: downloading the data is handled in notebook.ipynb; this is here only as a reference.
 
 
 ```python
@@ -87,10 +86,10 @@ In the Machine Learning Zoomcamp, this replaces the Dataset class we built that 
 
 ## ✅ Requirements
 
-In order to run this project you'll need to clone the repo and install the following (zoomcamp participants should already have these installed.)
+In order to run this project you'll need to clone the repo and install the following (Zoomcamp participants should already have these installed):
 
 * uv: [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/)
-* python 3.10+: [https://www.python.org/downloads/](https://www.python.org/downloads/) (note: I used 3.13)
+* python 3.13: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 * docker: [https://docs.docker.com/desktop/](https://docs.docker.com/desktop/)
 * kubetl: https://kubernetes.io/docs/tasks/tools/#kubectl
 * kind: [https://kind.sigs.k8s.io/docs/user/quick-start/](https://kind.sigs.k8s.io/docs/user/quick-start/)
@@ -101,7 +100,7 @@ All instructions after this point require you to be in the root of the cloned re
 
 ## 1: Dependency Management
 Install packages: `uv sync --locked`
-    * You can now run the notebook (notebook.ipynb) if you want, but it may take an hour to run.
+    * You can now run the notebook (notebook.ipynb).
 
 ## 2: Build the Docker Container
 Build the container locally: `docker build -t digit-classifier:v1 .`
@@ -109,6 +108,8 @@ Build the container locally: `docker build -t digit-classifier:v1 .`
 ### To test predict.py (not required):
 1. `uv run uvicorn predict:app --host 0.0.0.0 --port 8080 --reload`
 2. Navigate to the docs page and click the 'try it out' button: [http://0.0.0.0:8080/docs](http://0.0.0.0:8080/docs)
+3. Choose one of the files in the test_images directory, eg: `mnist_0_label_5.png`
+4. The correct answer is in the filename; it is the number after 'label'
 
 ### To test the digit-classifier docker container (not required): 
 1. `docker run -it --rm -p 8080:8080 digit-classifier:v1`
@@ -132,7 +133,8 @@ curl -X 'POST' \
     * to show services: `kubectl get services`
 5. Forward port to localhost: `kubectl port-forward service/digit-classifier 30080:8080`
 6. In your browser, open [localhost:30080/docs](localhost:30080/docs) to test the predict api via the 'try it out' button. 
-Choose one of the files in the test_images directory, eg: `mnist_0_label_5.png`
+7. Choose one of the files in the test_images directory, eg: `mnist_0_label_5.png`
+8. The correct answer is in the filename; it is the number after 'label'
 
 ### Example post request to k8s deployment (port 30080):
 ```shell
